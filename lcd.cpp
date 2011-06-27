@@ -58,6 +58,11 @@ void t_lcd::clearDisplay(void)
 	sendCmd(0x01);
 }
 
+void t_lcd::returnHome(void)
+{
+	sendCmd(0x02);
+}
+
 void t_lcd::waitBusy(void)
 {
 	CLEARPIN(DB7_PORT, DB7_PIN);
