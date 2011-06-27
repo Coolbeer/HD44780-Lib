@@ -13,10 +13,76 @@ void t_lcd::init(void)
 	DDR(DB6_PORT)	|= (1 << DD(DB6_PORT, DB6_PIN));
 	DDR(DB7_PORT)	|= (1 << DD(DB7_PORT, DB7_PIN));
 
-	_delay_ms(15);
-	setDBPort(0x3); //0b0011
-	_delay_ms(5);
+	CLEARPIN(RS_PORT,  RS_PIN);
+	CLEARPIN(E_PORT,   E_PIN);
+	CLEARPIN(RW_PORT,  RW_PIN);
+	CLEARPIN(DB4_PORT, DB4_PIN);
+	CLEARPIN(DB5_PORT, DB5_PIN);
+	CLEARPIN(DB6_PORT, DB6_PIN);
+	CLEARPIN(DB7_PORT, DB7_PIN);
 
+	_delay_ms(40);
+
+	SETPIN(E_PORT, E_PIN);
+	setDBPort(0x3); //0b0011
+
+	_delay_ms(5);
+	CLEARPIN(E_PORT, E_PIN);
+
+	_delay_ms(1);
+	SETPIN(E_PORT, E_PIN);
+
+	_delay_ms(1);
+	CLEARPIN(E_PORT, E_PIN);
+
+	SETPIN(E_PORT, E_PIN);
+
+	_delay_ms(1);
+
+	CLEARPIN(E_PORT, E_PIN);
+
+	setDBPort(0x2);
+	_delay_ms(1);
+	waitBusy();
+	
+	sendCmd(0x22);
+
+	sendCmd(0x01);
+	sendCmd(0x06);
+
+	sendCmd(0x0C);
+//	sendCmd(0x01);
+}
+
+void t_lcd::waitBusy(void)
+{
+	CLEARPIN(DB7_PORT, DB7_PIN);
+	CLEARPIN(RS_PORT, RS_PIN);
+	SETPIN(RW_PORT, RW_PIN);
+
+	while(PIN(DB7_PORT) & (1 << PINX(DB7_PORT, DB7_PIN)))
+		asm volatile ( "nop" );
+
+	CLEARPIN(RW_PORT, RW_PIN);
+}
+
+void t_lcd::sendString(char *data)
+{
+	uint8_t cnt = 0;
+	while(data[cnt] != '\0')
+	{
+		sendData(data[cnt]);
+		++cnt;
+	}
+}
+
+void t_lcd::gotoXY(uint8_t x, uint8_t y)
+{
+	uint8_t gotoCMD = 0x80;
+	if(y)
+		gotoCMD |= 0x40;
+	gotoCMD |= x;
+	sendCmd(gotoCMD);
 }
 
 void t_lcd::setDBPort(uint8_t bits)
@@ -44,22 +110,26 @@ void t_lcd::setDBPort(uint8_t bits)
 
 void t_lcd::sendByte(uint8_t data, bool type)
 {
+	uint8_t tmpData;
 	if(type)
 		SETPIN(RS_PORT, RS_PIN);
 	else
 		CLEARPIN(RS_PORT, RS_PIN);
 
+	tmpData = data >> 4;
 	for(uint8_t teller = 0; teller != 2; ++teller)
 	{
 		_delay_us(1);
 		SETPIN(E_PORT, E_PIN);
 
-		setDBPort(data);
+		setDBPort(tmpData);
 		
 		_delay_us(1);
 
 		CLEARPIN(E_PORT, E_PIN);
 
-		data = data >> 4;
+		tmpData = data;
 	}
+	_delay_ms(1);
+	waitBusy();
 }
