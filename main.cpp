@@ -9,7 +9,7 @@ int main(void)
 	lcd.init();
 	
 	lcd.sendStringXY(1,0,"Hello World!");
-	lcd.sendStringXY(1,1,"Wooooohoooooo!");
+	lcd.writeIntXY(5,1, 100000, 8);
 
 	return 0;
 }

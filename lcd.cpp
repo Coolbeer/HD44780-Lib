@@ -90,6 +90,33 @@ void t_lcd::sendStringXY(uint8_t x, uint8_t y, char *data)
 	sendString(data);
 }
 
+void t_lcd::writeInt(uint32_t value, uint8_t padding)
+{
+	char stringToPrint[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+	uint8_t pos = 19;
+	uint8_t start = 0;
+	while(value)
+	{
+		stringToPrint[pos] = value%10;
+		value /= 10;
+		--pos;
+	}
+
+	if(padding == 0)
+		while(stringToPrint[start] == 0) ++start;
+	else
+		start = 20 - padding;
+
+	for(pos = start; pos != 20; ++pos)
+		sendData(stringToPrint[pos]+48);
+}
+
+void t_lcd::writeIntXY(uint8_t x, uint8_t y, uint32_t value, uint8_t padding)
+{
+	gotoXY(x,y);
+	writeInt(value, padding);
+}
+
 void t_lcd::setDBPort(uint8_t bits)
 {
 	if(bits & (1 << 0))
