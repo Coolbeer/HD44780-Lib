@@ -47,10 +47,10 @@ void t_lcd::init(void)
 	
 	sendCmd(0x22);
 
-	sendCmd(0x01);
+	clearDisplay();
 	sendCmd(0x06);
 
-	sendCmd(0x0C);
+	displayOnOff(true, false, false);
 }
 
 void t_lcd::clearDisplay(void)
@@ -61,6 +61,18 @@ void t_lcd::clearDisplay(void)
 void t_lcd::returnHome(void)
 {
 	sendCmd(0x02);
+}
+
+void t_lcd::displayOnOff(bool onOff, bool cursorOnOff, bool cursorBlink)
+{
+	uint8_t cmd = 0x08;
+	if(onOff)
+		cmd |= 0x04;
+	if(cursorOnOff)
+		cmd |= 0x02;
+	if(cursorBlink)
+		cmd |= 0x01;
+	sendCmd(cmd);
 }
 
 void t_lcd::waitBusy(void)
