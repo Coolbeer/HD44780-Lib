@@ -46,7 +46,7 @@
 class t_lcd
 {
 	public:
-		void init(void);
+		void init(bool noOfDisplayLines = 1, bool font = 0);
 		void writeByte(uint8_t data, bool type);
 		void writeString(char *data);
 		void writeStringXY(uint8_t x, uint8_t y, char *data);

@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-void t_lcd::init(void)
+void t_lcd::init(bool noOfDisplayLines, bool font)
 {
 	//Set the ports as output
 	DDR(RS_PORT)	|= (1 << DD(RS_PORT, RS_PIN));
@@ -13,6 +13,7 @@ void t_lcd::init(void)
 	DDR(DB6_PORT)	|= (1 << DD(DB6_PORT, DB6_PIN));
 	DDR(DB7_PORT)	|= (1 << DD(DB7_PORT, DB7_PIN));
 
+	//Make sure all pins are low
 	CLEARPIN(RS_PORT,  RS_PIN);
 	CLEARPIN(E_PORT,   E_PIN);
 	CLEARPIN(RW_PORT,  RW_PIN);
@@ -26,10 +27,10 @@ void t_lcd::init(void)
 	SETPIN(E_PORT, E_PIN);
 	setDBPort(0x3); //0b0011
 
+	_delay_ms(1);
+	CLEARPIN(E_PORT, E_PIN);
+
 	_delay_ms(5);
-	CLEARPIN(E_PORT, E_PIN);
-
-	_delay_ms(1);
 	SETPIN(E_PORT, E_PIN);
 
 	_delay_ms(1);
@@ -40,12 +41,24 @@ void t_lcd::init(void)
 	_delay_ms(1);
 
 	CLEARPIN(E_PORT, E_PIN);
+
+	_delay_ms(1);
+
+	SETPIN(E_PORT, E_PIN);
 
 	setDBPort(0x2);
+
+	CLEARPIN(E_PORT, E_PIN);
+
 	_delay_ms(1);
 	waitBusy();
 	
-	sendCmd(0x22);
+	uint8_t cmd = 0x20;
+	if(noOfDisplayLines)
+		cmd |= 0x08;
+	if(font)
+		cmd |= 0x04;
+	sendCmd(cmd);
 
 	clearDisplay();
 	sendCmd(0x06);
