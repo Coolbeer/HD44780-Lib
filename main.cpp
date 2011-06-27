@@ -8,9 +8,8 @@ int main(void)
 	t_lcd lcd;
 	lcd.init();
 	
-	lcd.sendString("Hello World!");
-	lcd.gotoXY(0,1);
-	lcd.sendString("Wooooohoooooo!");
+	lcd.sendStringXY(1,0,"Hello World!");
+	lcd.sendStringXY(1,1,"Wooooohoooooo!");
 
 	return 0;
 }

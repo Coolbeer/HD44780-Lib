@@ -51,7 +51,6 @@ void t_lcd::init(void)
 	sendCmd(0x06);
 
 	sendCmd(0x0C);
-//	sendCmd(0x01);
 }
 
 void t_lcd::waitBusy(void)
@@ -83,6 +82,12 @@ void t_lcd::gotoXY(uint8_t x, uint8_t y)
 		gotoCMD |= 0x40;
 	gotoCMD |= x;
 	sendCmd(gotoCMD);
+}
+
+void t_lcd::sendStringXY(uint8_t x, uint8_t y, char *data)
+{
+	gotoXY(x,y);
+	sendString(data);
 }
 
 void t_lcd::setDBPort(uint8_t bits)

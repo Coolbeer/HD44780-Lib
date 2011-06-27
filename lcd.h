@@ -49,6 +49,7 @@ class t_lcd
 		void init(void);
 		void sendByte(uint8_t data, bool type);
 		void sendString(char *data);
+		void sendStringXY(uint8_t x, uint8_t y, char *data);
 		void gotoXY(uint8_t x, uint8_t y);
 	private:
 		void setDBPort(uint8_t data);
