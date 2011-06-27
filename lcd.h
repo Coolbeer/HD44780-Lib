@@ -53,6 +53,7 @@ class t_lcd
 		void gotoXY(uint8_t x, uint8_t y);
 		void writeInt(uint32_t value, uint8_t padding = 0);
 		void writeIntXY(uint8_t x, uint8_t y, uint32_t value, uint8_t padding = 0);
+		void clearDisplay(void);
 	private:
 		void setDBPort(uint8_t data);
 		void waitBusy(void);
