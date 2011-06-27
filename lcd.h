@@ -34,8 +34,8 @@
 #define SETPIN(x,y) PORT(x) |= (1 << PORTX(x, y))
 #define CLEARPIN(x,y) PORT(x) &= ~(1 << PORTX(x, y))
 
-#define sendCmd(c) (sendByte(c,false))
-#define sendData(d) (sendByte(d,true))
+#define sendCmd(c) (writeByte(c,false))
+#define sendData(d) (writeByte(d,true))
 
 #ifndef F_CPU
 	#define F_CPU 10000000
@@ -47,9 +47,9 @@ class t_lcd
 {
 	public:
 		void init(void);
-		void sendByte(uint8_t data, bool type);
-		void sendString(char *data);
-		void sendStringXY(uint8_t x, uint8_t y, char *data);
+		void writeByte(uint8_t data, bool type);
+		void writeString(char *data);
+		void writeStringXY(uint8_t x, uint8_t y, char *data);
 		void gotoXY(uint8_t x, uint8_t y);
 		void writeInt(uint32_t value, uint8_t padding = 0);
 		void writeIntXY(uint8_t x, uint8_t y, uint32_t value, uint8_t padding = 0);

@@ -65,7 +65,7 @@ void t_lcd::waitBusy(void)
 	CLEARPIN(RW_PORT, RW_PIN);
 }
 
-void t_lcd::sendString(char *data)
+void t_lcd::writeString(char *data)
 {
 	uint8_t cnt = 0;
 	while(data[cnt] != '\0')
@@ -84,10 +84,10 @@ void t_lcd::gotoXY(uint8_t x, uint8_t y)
 	sendCmd(gotoCMD);
 }
 
-void t_lcd::sendStringXY(uint8_t x, uint8_t y, char *data)
+void t_lcd::writeStringXY(uint8_t x, uint8_t y, char *data)
 {
 	gotoXY(x,y);
-	sendString(data);
+	writeString(data);
 }
 
 void t_lcd::writeInt(uint32_t value, uint8_t padding)
@@ -140,7 +140,7 @@ void t_lcd::setDBPort(uint8_t bits)
 		CLEARPIN(DB7_PORT, DB7_PIN);
 }
 
-void t_lcd::sendByte(uint8_t data, bool type)
+void t_lcd::writeByte(uint8_t data, bool type)
 {
 	uint8_t tmpData;
 	if(type)
