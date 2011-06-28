@@ -59,7 +59,7 @@ void t_lcd::init(initFlags flags)
 	clearDisplay();
 	sendCmd(0x06);
 
-	displayOnOff();
+	setDisplayFlags();
 }
 
 void t_lcd::clearDisplay(void)
@@ -72,7 +72,7 @@ void t_lcd::returnHome(void)
 	sendCmd(0x02);
 }
 
-void t_lcd::displayOnOff(displayFlags flags)
+void t_lcd::setDisplayFlags(displayFlags flags)
 {
 	uint8_t cmd = 0x08 | flags;
 	sendCmd(cmd);

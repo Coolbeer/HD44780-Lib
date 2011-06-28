@@ -58,7 +58,7 @@ class t_lcd
 		void writeIntXY(uint8_t x, uint8_t y, uint32_t value, uint8_t padding = 0);
 		void clearDisplay(void);
 		void returnHome(void);
-		void displayOnOff(displayFlags flags = DISPLAYON);
+		void setDisplayFlags(displayFlags flags = DISPLAYON);
 	private:
 		void setDBPort(uint8_t data);
 		void waitBusy(void);
