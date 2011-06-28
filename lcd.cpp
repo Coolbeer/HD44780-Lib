@@ -24,33 +24,24 @@ void t_lcd::init(initFlags flags)
 
 	_delay_ms(40);
 
-	SETPIN(E_PORT, E_PIN);
 	setDBPort(0x3); //0b0011
 
-	_delay_ms(1);
-	CLEARPIN(E_PORT, E_PIN);
-
 	_delay_ms(5);
-	SETPIN(E_PORT, E_PIN);
 
+	SETPIN(E_PORT, E_PIN);
 	_delay_ms(1);
 	CLEARPIN(E_PORT, E_PIN);
 
 	SETPIN(E_PORT, E_PIN);
-
 	_delay_ms(1);
-
 	CLEARPIN(E_PORT, E_PIN);
 
 	_delay_ms(1);
-
-	SETPIN(E_PORT, E_PIN);
 
 	setDBPort(0x2);
 
-	CLEARPIN(E_PORT, E_PIN);
-
 	_delay_ms(1);
+
 	waitBusy();
 	
 	uint8_t cmd = 0x20 | flags;
@@ -144,6 +135,8 @@ void t_lcd::writeIntXY(uint8_t x, uint8_t y, uint32_t value, uint8_t padding)
 
 void t_lcd::setDBPort(uint8_t bits)
 {
+	SETPIN(E_PORT, E_PIN);
+
 	if(bits & (1 << 0))
 		SETPIN(DB4_PORT, DB4_PIN);
 	else
@@ -163,6 +156,10 @@ void t_lcd::setDBPort(uint8_t bits)
 		SETPIN(DB7_PORT, DB7_PIN);
 	else
 		CLEARPIN(DB7_PORT, DB7_PIN);
+
+	_delay_us(1);
+
+	CLEARPIN(E_PORT, E_PIN);
 }
 
 void t_lcd::writeByte(uint8_t data, bool type)
@@ -176,15 +173,7 @@ void t_lcd::writeByte(uint8_t data, bool type)
 	tmpData = data >> 4;
 	for(uint8_t teller = 0; teller != 2; ++teller)
 	{
-		_delay_us(1);
-		SETPIN(E_PORT, E_PIN);
-
 		setDBPort(tmpData);
-		
-		_delay_us(1);
-
-		CLEARPIN(E_PORT, E_PIN);
-
 		tmpData = data;
 	}
 	_delay_ms(1);
