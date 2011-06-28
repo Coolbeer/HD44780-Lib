@@ -43,10 +43,13 @@
 
 #include <avr/io.h>
 
+enum initFlags { DUALDISPLAY = 0x08, FONT = 0x04 };
+enum displayFlags { DISPLAYON = 0x04, CURSORON = 0x02, CURSORBLINK = 0x01};
+
 class t_lcd
 {
 	public:
-		void init(bool noOfDisplayLines = 1, bool font = 0);
+		void init(initFlags flags = DUALDISPLAY);
 		void writeByte(uint8_t data, bool type);
 		void writeString(char *data);
 		void writeStringXY(uint8_t x, uint8_t y, char *data);
@@ -55,7 +58,7 @@ class t_lcd
 		void writeIntXY(uint8_t x, uint8_t y, uint32_t value, uint8_t padding = 0);
 		void clearDisplay(void);
 		void returnHome(void);
-		void displayOnOff(bool onOff, bool cursorOnOff, bool cursorBlink);
+		void displayOnOff(displayFlags flags = DISPLAYON);
 	private:
 		void setDBPort(uint8_t data);
 		void waitBusy(void);

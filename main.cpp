@@ -9,7 +9,8 @@ int main(void)
 	lcd.init();
 	
 	lcd.writeStringXY(1,0,(char*)"Hello World!");
-	lcd.writeIntXY(5,1, 100000, 8);
+	for(uint32_t hepp = 0; hepp != 99000000; ++hepp)
+		lcd.writeIntXY(5,1, hepp, 8);
 
 	return 0;
 }

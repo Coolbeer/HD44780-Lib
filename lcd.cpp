@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-void t_lcd::init(bool noOfDisplayLines, bool font)
+void t_lcd::init(initFlags flags)
 {
 	//Set the ports as output
 	DDR(RS_PORT)	|= (1 << DD(RS_PORT, RS_PIN));
@@ -53,17 +53,13 @@ void t_lcd::init(bool noOfDisplayLines, bool font)
 	_delay_ms(1);
 	waitBusy();
 	
-	uint8_t cmd = 0x20;
-	if(noOfDisplayLines)
-		cmd |= 0x08;
-	if(font)
-		cmd |= 0x04;
+	uint8_t cmd = 0x20 | flags;
 	sendCmd(cmd);
 
 	clearDisplay();
 	sendCmd(0x06);
 
-	displayOnOff(true, false, false);
+	displayOnOff();
 }
 
 void t_lcd::clearDisplay(void)
@@ -76,15 +72,9 @@ void t_lcd::returnHome(void)
 	sendCmd(0x02);
 }
 
-void t_lcd::displayOnOff(bool onOff, bool cursorOnOff, bool cursorBlink)
+void t_lcd::displayOnOff(displayFlags flags)
 {
-	uint8_t cmd = 0x08;
-	if(onOff)
-		cmd |= 0x04;
-	if(cursorOnOff)
-		cmd |= 0x02;
-	if(cursorBlink)
-		cmd |= 0x01;
+	uint8_t cmd = 0x08 | flags;
 	sendCmd(cmd);
 }
 
