@@ -44,13 +44,17 @@ void t_lcd::init(initFlags flags)
 
 	waitBusy();
 	
-	uint8_t cmd = 0x20 | flags;
-	sendCmd(cmd);
+	sendCmd(0x20 | flags);
 
 	clearDisplay();
 	sendCmd(0x06);
 
 	setDisplayFlags();
+}
+
+void t_lcd::displayShift(shiftFlags flags)
+{
+	sendCmd(0x10 | 0x08 | flags);
 }
 
 void t_lcd::clearDisplay(void)
@@ -65,8 +69,7 @@ void t_lcd::returnHome(void)
 
 void t_lcd::setDisplayFlags(displayFlags flags)
 {
-	uint8_t cmd = 0x08 | flags;
-	sendCmd(cmd);
+	sendCmd(0x08 | flags);
 }
 
 void t_lcd::waitBusy(void)

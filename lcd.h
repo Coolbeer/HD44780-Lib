@@ -45,6 +45,7 @@
 
 enum initFlags { DUALDISPLAY = 0x08, FONT = 0x04 };
 enum displayFlags { DISPLAYON = 0x04, CURSORON = 0x02, CURSORBLINK = 0x01};
+enum shiftFlags { LEFTSHIFT = 0x00, RIGHTSHIFT = 0x04 };
 
 class t_lcd
 {
@@ -59,6 +60,7 @@ class t_lcd
 		void clearDisplay(void);
 		void returnHome(void);
 		void setDisplayFlags(displayFlags flags = DISPLAYON);
+		void displayShift(shiftFlags flags = LEFTSHIFT);
 	private:
 		void setDBPort(uint8_t data);
 		void waitBusy(void);
